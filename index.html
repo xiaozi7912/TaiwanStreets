@@ -1,8 +1,81 @@
 <html>
 <head>
-	<title></title>
+	<title>Taiwan Streets</title>
+	<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+	<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			var cities = [];
+			getCity();
+
+			$("#address1").change(function(e){
+				console.log(e);
+				console.log($(this).val());
+				var selected = $(this).val();
+				$("#address2").empty();
+				$.each(cities[selected].COUNTRIES,function(key,item){
+					console.log(key);
+					console.log(item);
+					var $option = $("<option></option>");
+						$option.prop("value",item.MAILCODE);
+						$option.text(item.COUNTRY);
+
+						$("#address2").append($option);						
+				});
+				$("#address2").change();
+			});
+			$("#address2").change(function(e){
+				var selected = $(this).val();
+				getRoad(selected);
+			});
+			$("#address3").change(function(e){});
+
+			function getCity(){
+				$.ajax({
+					url:"php/city.php",
+					type:"GET"
+				}).done(function(response){
+					console.log(response);
+					cities = response.result;
+					$.each(cities,function(key,item){
+						console.log(key);
+						console.log(item);
+						var $option = $("<option></option>");
+						$option.prop("value",key);
+						$option.text(item.CITY);
+
+						$("#address1").append($option);
+						$("#address1").change();
+					});
+				});
+			}
+
+			function getRoad(mailcode){
+				$.ajax({
+					url:"php/road.php",
+					type:"GET",
+					data:{"mailcode":mailcode}
+				}).done(function(response){
+					console.log(response);
+					var dataList = response.result;
+					$("#address3").empty();
+					$.each(dataList,function(key,item){
+						console.log(key);
+						console.log(item);
+						var $option = $("<option></option>");
+						$option.prop("value",key);
+						$option.text(item);
+
+						$("#address3").append($option);
+					});
+				});
+			}
+		});
+	</script>
 </head>
 <body>
-
+	<select id="address1"></select>
+	<select id="address2"></select>
+	<select id="address3"></select>
 </body>
 </html>

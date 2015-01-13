@@ -20,18 +20,7 @@
 				$fCountries = array();
 				$fCountries["MAILCODE"] = $rCodes[$i];
 				$fCountries["COUNTRY"] = $rCountries[$i];
-				$fCountries["ROADS"] = array();
-				$command2 = sprintf("SELECT ROAD FROM TAIWANSTREETS.TAIWANSTREETS WHERE MAILCODE=%s;",$rCodes[$i]);
-
-				if($roadResult = $conn->query($command2)){
-					while ($road = $roadResult->fetch_assoc()) {
-						array_push($fCountries["ROADS"], $road["ROAD"]);
-					}
-					$roadResult->close();
-				}else{
-					http_response_code(404);
-					$response["error"] = $conn->error;
-				}
+				
 				array_push($formatted["COUNTRIES"], $fCountries);
 			}			
 			array_push($rows, $formatted);
