@@ -1,4 +1,4 @@
-<?php
+<?php	
 	$host = "localhost";
 	$user = "demo";
 	$pwd = "demo";
@@ -7,8 +7,7 @@
 	$response = array();
 
 	if($conn->connect_errno){
-		array_push($response, $conn->connect_error);
+		$response["error"] = $conn->connect_error;
+		echo json_encode($response);
 	}
-
-	echo json_encode($response);
 ?>
