@@ -1,21 +1,17 @@
 <?php
 	require_once("config.php");
 	header("Content-Type:application/json");
-	$mailcode = $_GET["mailcode"];
 	$response = array();
-	$command = sprintf("SELECT ROAD FROM TAIWANSTREETS.TAIWANSTREETS WHERE MAILCODE=%s;",$mailcode);
+	$command = "SELECT CITY,MAILCODE,COUNTRY,GROUP_CONCAT(DISTINCT ROAD) ROADS FROM TAIWANSTREETS.TAIWANSTREETS GROUP BY CITY,COUNTRY ORDER BY MAILCODE;";
 
-	// $response["command"] = $command;
 	if($result = $conn->query($command)){
 		$rows = array();
 		while($row = $result->fetch_assoc()){
-			array_push($rows, $row["ROAD"]);
+			$row["ROADS"] = preg_split("/,/", $row["ROADS"]);
+			array_push($rows, $row);
 		}
 		$response["result"] = $rows;
 		$result->close();
-	}else{
-		http_response_code(404);
-		$response["error"] = $conn->error;
 	}
 	echo json_encode($response);
 ?>

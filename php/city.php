@@ -4,7 +4,7 @@
 	$response = array();
 	$command = "SELECT CITY,GROUP_CONCAT(DISTINCT MAILCODE) AS MAILCODES,GROUP_CONCAT(DISTINCT COUNTRY) AS COUNTRIES FROM TAIWANSTREETS.TAIWANSTREETS GROUP BY CITY ORDER BY MAILCODE;";
 
-	$response["command"] = $command;
+	// $response["command"] = $command;
 	if($result = $conn->query($command)){
 		$rows = array();
 		while($row = $result->fetch_assoc()){
